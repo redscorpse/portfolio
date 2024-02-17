@@ -1,5 +1,5 @@
 ---
-title: Raspberry Pi - remote server
+title: Raspberry Pi
 tags: [RaspberryPi,Linux]
 draft: true
 ---
