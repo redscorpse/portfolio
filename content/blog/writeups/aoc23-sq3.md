@@ -3,8 +3,7 @@ title: Advent Of Cyber (sq3)
 author: reds
 date: 2023-12-14 15:03
 tags: [cybersecurity, ctf, writeup, TryHackMe, virtualization]
-pin: false
-hidden: false
+draft: true
 ---
 
 # Frosteau Busy with Vim

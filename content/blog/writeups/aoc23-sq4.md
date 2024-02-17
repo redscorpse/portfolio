@@ -3,8 +3,7 @@ title: Advent Of Cyber (sq4)
 author: reds
 date: 2023-12-22 11:13
 tags: [cybersecurity, ctf, writeup, TryHackMe]
-pin: false
-hidden: false
+draft: true
 ---
 
 https://tryhackme.com/room/surfingyetiiscomingtotown

@@ -47,7 +47,7 @@
 .mobile-only.explorer {
   #explorer-content {
     &:not(.collapsed) {
-      width: 88vw; /*90vw;*/
+      width: auto; /*90vw;*/
       background-color: var(--light);
       opacity: 90%;
       height: auto; /*90dvh;*/

@@ -3,8 +3,7 @@ title: Advent Of Cyber (sq1)
 author: reds
 date: 2023-12-11 23:11
 tags: [cybersecurity, ctf, writeup, TryHackMe, wireshark]
-pin: false
-hidden: false
+draft: true
 ---
 
 # Advent of Cyber 2023 - Side quest 1

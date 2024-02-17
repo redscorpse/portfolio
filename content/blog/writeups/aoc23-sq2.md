@@ -3,8 +3,7 @@ title: Advent Of Cyber (sq2)
 author: reds
 date: 2023-12-11 23:11
 tags: [cybersecurity, ctf, writeup, TryHackMe, bof]
-pin: false
-hidden: false
+draft: true
 ---
 
 # [SQ2: Snowy ARMageddon](https://tryhackme.com/room/armageddon2r)
