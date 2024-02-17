@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+
+	<title>Red's</title>
+	<link rel="icon/png" href="https://redscorpse.sytes.net/web/media/img/RC.png" />
+	
+    <link href="css/fonts.css" rel="stylesheet" type="text/css" />
+    <link href="css/career.css" rel="stylesheet" type="text/css" />
+    <link href="css/cards.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+
+</head>
+
+<body>
+	<h1 id='title'>Career</h1>
+    <canvas class="background"></canvas>
+
+<div id='card-container'>
+<ul class="cards">
+    <li class="card">
+        <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+            <div class="flipper">
+                <div class="front">
+                    <h1>Scientific Baccalaureate</h1>                   
+                    <p>at</p>
+                    <h3>IES Sant Elm</h3>
+                    <p><strong>(2019-2021)</strong></p>
+                </div>
+                <div class="back">
+                    
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="card">
+        <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+            <div class="flipper">
+                <div class="front">
+                    <h1>Chemistry Bachelor's Degree</h1>
+                    <p>from</p>
+                    <h3>University of Girona</h3>
+                    <p><strong>(2021-Today)</strong></p>
+                    </center>
+                </div>
+                <div class="back">
+                    
+                </div>
+            </div>
+        </div>
+    </li>
+    
+    <li class="card">
+        <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+            <div class="flipper">
+                <div class="front">
+                    <h1>Card 3</h1>
+                    
+                </div>
+                <div class="back">
+                    
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+</div>
+
+<script src="js/particles.min.js"></script>
+    
+<script>
+/* Flip Cards */
+$(document).on("click", ".flip-container", function () {
+    $(this).toggleClass('hover');
+});
+</script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/cash/1.3.0/cash.min.js'></script>
+<script>
+/* Deck Cards */
+$.fn.commentCards = function(){
+
+  return this.each(function(){
+
+    var $this = $(this),
+        $cards = $this.find('.card'),
+        $current = $cards.filter('.card--current'),
+        $next;
+
+    $cards.on('click',function(){
+      if ( !$current.is(this) ) {
+        $cards.removeClass('card--current card--out card--next');
+        $current.addClass('card--out');
+        $current = $(this).addClass('card--current');
+        $next = $current.next();
+        $next = $next.length ? $next : $cards.first();
+        $next.addClass('card--next');
+      }
+    });
+
+    if ( !$current.length ) {
+      $current = $cards.last();
+      $cards.first().trigger('click');
+    }
+
+    $this.addClass('cards--active');
+
+  })
+
+};
+
+$('.cards').commentCards();
+</script>
+
+    
+</body>
+</html>

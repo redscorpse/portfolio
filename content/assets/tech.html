@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - CSS vertical carousel animation</title>
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html, body {
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+}
+
+body {
+  background: black;
+  color: #66ee88;
+}
+body * {
+  font-family: 'VT323', monospace;
+  font-weight: 400;
+}
+
+
+/* --- CAROUSEL --- */
+.wrapper {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+
+.carousel__item {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 240px;
+  height: 100px;
+  padding: 0 12px;
+  opacity: 0;
+  will-change: transform, opacity;
+  -webkit-animation: carousel-animate calc(2.6s *8) linear infinite;
+    /*3s,9items; 2.6s,8items*/
+          animation: carousel-animate calc(2.6s *8) linear infinite;
+}
+
+.carousel__item:nth-child(1) {
+  -webkit-animation-delay: calc(2.6s * -1);
+          animation-delay: calc(2.6s * -1);
+}
+
+.carousel__item:nth-child(2) {
+  -webkit-animation-delay: calc(2.6s * 0);
+          animation-delay: calc(2.6s * 0);
+}
+
+.carousel__item:nth-child(3) {
+  -webkit-animation-delay: calc(2.6s * 1);
+          animation-delay: calc(2.6s * 1);
+}
+
+.carousel__item:nth-child(4) {
+  -webkit-animation-delay: calc(2.6s * 2);
+          animation-delay: calc(2.6s * 2);
+}
+
+.carousel__item:nth-child(5) {
+  -webkit-animation-delay: calc(2.6s * 3);
+          animation-delay: calc(2.6s * 3);
+}
+
+.carousel__item:nth-child(6) {
+  -webkit-animation-delay: calc(2.6s * 4);
+          animation-delay: calc(2.6s * 4);
+}
+
+.carousel__item:nth-child(7) {
+  -webkit-animation-delay: calc(2.6s * 5);
+          animation-delay: calc(2.6s * 5);
+}
+
+/*.carousel__item:nth-child(8) {
+  -webkit-animation-delay: calc(3s * 6);
+          animation-delay: calc(3s * 6);
+}*/
+
+.carousel__item:last-child {
+  -webkit-animation-delay: calc(-2.6s * 2);
+          animation-delay: calc(-2.6s * 2);
+}
+
+.carousel__item-head {
+  border-radius: 25%;
+  background-color: #000000;
+  border: 1px dashed #33cc66;
+  width: 70px;
+  height: 70px;
+  padding: 10px;
+  position: relative;
+  margin-right: -45px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+}
+.carousel__item-head .image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.carousel__item-body {
+  width: 100%;
+  height: 100%;
+  color: #66ee88;
+  background: linear-gradient(120deg, #002000, #001000);
+  border: 2px solid #66ee88;
+  /*box-shadow: 6px 6px rgba(100,230,140, 0.4);*/
+  box-shadow:  00px 01px rgb(54,91,59),
+               01px 00px rgb(54,91,59),
+               01px 02px rgb(54,91,59),
+               02px 01px rgb(54,91,59),
+               02px 03px rgb(54,91,59),
+               03px 02px rgb(54,91,59),
+               03px 04px rgb(54,91,59),
+               04px 03px rgb(54,91,59),
+               04px 05px rgb(54,91,59),
+               05px 04px rgb(54,91,59),
+               05px 06px rgb(54,91,59),
+               06px 05px rgb(54,91,59),
+               06px 07px rgb(54,91,59),
+               07px 06px rgb(54,91,59),
+               07px 08px rgb(54,91,59);
+  border-radius: 0;
+  padding: 16px 18px 16px 58px;
+  font-size: 14px;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 11px;
+}
+
+@-webkit-keyframes carousel-animate {
+  0% {
+    transform: translateX(80%) scale(0.4); /*90% for 9 items, scale +0.1*/
+    opacity: 0;
+    visibility: hidden;
+  }
+  3%, 11.1% {
+    transform: translateX(80%) scale(0.6);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  14.1%, 22.2% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  25.2%, 33.3% {
+    transform: translateX(-80%) scale(0.6);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  36.3% {
+    transform: translateX(-80%) scale(0.4);
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    transform: translateX(-80%) scale(0.4);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes carousel-animate {
+  0% {
+    transform: translateX(80%) scale(0.4);
+    opacity: 0;
+    visibility: hidden;
+  }
+  3%, 11.1% {
+    transform: translateX(80%) scale(0.6);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  14.1%, 22.2% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    z-index: 10;
+    visibility: visible;
+  }
+  25.2%, 33.3% {
+    transform: translateX(-80%) scale(0.6);
+    opacity: 0.4;
+    visibility: visible;
+  }
+  36.3% {
+    transform: translateX(-80%) scale(0.4);
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    transform: translateX(-80%) scale(0.4);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+/* --- END CAROUSEL --- */
+  
+h1 {
+  font-size: 70px;
+  text-align: center;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1> TECH </h1>
+
+
+<div class='wrapper'>
+  <div class='carousel'>
+    
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <div class='image' style="background-image: url('https://pluspng.com/img-png/python-logo-png-open-2000.png');"></div>
+      </div>
+      <div class='carousel__item-body'>
+        <p class='title'>Python</p>
+        <p>LEVEL:   Intermediate</p>
+      </div>
+    </div>
+
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <div class='image' style="background-image: url('https://cdn.iconscout.com/icon/free/png-512/docker-3521391-2944835.png?f=avif&w=512');"></div>
+      </div>
+      <div class='carousel__item-body'>
+        <p class='title'>Docker</p>
+        <p>LEVEL:   Intermediate</p>
+      </div>
+    </div>
+
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://cdn.iconscout.com/icon/free/png-512/raspberry-18-226046.png?f=avif&w=512')"></div>
+      <div class='carousel__item-body'>
+        <p class='title' style='font-size:22px'>Raspberry Pi</p>
+        <p>LEVEL:   Advanced</p>
+      </div>
+    </div>
+
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://cdn.freebiesupply.com/logos/large/2x/linux-tux-1-logo-png-transparent.png')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>Linux</p>
+        <p>LEVEL:   Advanced</p>
+      </div>
+    </div>
+
+    
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://cdn.iconscout.com/icon/free/png-512/postgresql-8-1175119.png?f=avif&w=512')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>PostgreSQL</p>
+        <p>LEVEL:   Intermediate</p>
+      </div>
+    </div>
+
+    
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://cdn.iconscout.com/icon/free/png-512/javascript-2752148-2284965.png?f=avif&w=512')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>JavaScript</p>
+        <p>LEVEL:   Beginner</p>
+      </div>
+    </div>
+
+    
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://www.bookofnetwork.com/images/code/images/c.jpg')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>C</p>
+        <p>LEVEL:   Beginner</p>
+      </div>
+    </div>
+
+    
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Fortran_logo.svg/250px-Fortran_logo.svg.png')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>Fortran</p>
+        <p>LEVEL:   Intermediate</p>
+      </div>
+    </div>
+
+    <!--
+    <div class='carousel__item'>
+      <div class='carousel__item-head'>
+        <didv class='image' style="background-image: url('')"></div>
+      <div class='carousel__item-body'>
+        <p class='title'>Title</p>
+        <p>LEVEL:   Level</p>
+      </div>
+    </div>
+    -->
+
+    
+  </div>
+</div>
+<!-- partial -->
+  
+</body>
+</html>
