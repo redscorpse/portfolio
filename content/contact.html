@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>Reds</title>
+	<!-- <title>𝕽𝖊𝖉'𝖘 𝕮𝖔𝖗𝖕𝖘𝖊</title> -->
+	<link rel="icon/png" href="assets/img/RC.png" />
+  <link rel="icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
+
+	<link href="assets/fonts/fonts.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/rstyle.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-X8P1904KPE"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-X8P1904KPE');
+	</script>
+
+</head>
+
+
+
+<body>
+
+<navbar></navbar>
+
+	<section id="contact" class='section' style="margin-top:80px">
+		<h2 class="center">Get in Touch</h2>
+		<div id="form-container">
+			<form target="_blank" action="https://formsubmit.co/42067fc53c7600f6b9e11764259c976d" method="POST">
+				<input type="text" name="name" class="form-control" placeholder="Your Name" required>
+				<input type="email" name="email" class="form-control" placeholder="Email Address" required>
+				<textarea placeholder="Your Message" class="form-control" name="message" rows="10" required></textarea>
+
+				<button type="submit" class="btn">Send Me an Email</button>
+			</form>
+		</div>
+	</section>
+
+
+
+	<section class='section'>
+		<h2 class="center">Follow Along</h2>
+		<div id='links'>
+			<a href='https://github.com/redscorpse' target='_blank' class='fa-brands fa-square-github'></a>
+			<a href='https://twitter.com/redsc0rpse' target='_blank' class='fa-brands fa-square-x-twitter'></a>
+			<a href='https://www.linkedin.com/mwlite/in/ana-rojas-15528419a' target='_blank'
+				class='fa-brands fa-linkedin'></a>
+		</div>
+	</section>
+
+	<script src="assets/js/script.js"></script>
+	<script>fetch("./components/navbar.html").then(response => {return response.text()}).then(data => {document.querySelector("navbar").innerHTML = data;});</script>
+
+</body>
+
+</html>

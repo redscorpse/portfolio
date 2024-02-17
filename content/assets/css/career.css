@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html, body {
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+}
+
+.background {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    height: 100%;
+}
+
+#title {
+    color:#50786C;
+    background-color: rgba(255,255,255, 0.6);
+    text-align: center;
+    font-family: 'Fira Sans';
+    font-size: 100px;
+    margin: 50px auto;
+}
+
+
+small {
+    font-size: 50%;
+}
+
+.card h1+p {
+    margin: -0.8em auto 0.5em;
+}
