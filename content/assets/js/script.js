@@ -1,17 +1,3 @@
-/* ----- PRELOADER ----- */
-window.addEventListener("load", function() {
-  setTimeout(function() {
-    const preloader = document.getElementById("preloader");
-    preloader.style.display = "none";
-  }, 5000);
-});
-
-
-
-
-
-
-
 /* ----- SHOW NAVBAR ON SCROLL UP ----- */
 const nav = document.querySelector("nav");
 const navHeight = 70;
@@ -40,7 +26,7 @@ function scrolled() {
 
 // Add event listener & debounce so not constantly checking for scroll
 let didScroll = false;
-window.addEventListener("scroll", function(e){
+window.addEventListener("scroll", function(){
   didScroll = true;
 });
 

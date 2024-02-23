@@ -6,10 +6,12 @@
 :root[saved-theme=dark] {
   color-scheme:dark;
   --bg-codeblock: #1a1622;
+  --color-code: #6bd474;
 }
 :root[saved-theme=light] {
   color-scheme:light;
   --bg-codeblock: #f4f4f4;
+  --color-code: #51b55a;
 }
 
 
@@ -334,17 +336,21 @@ h6 {
 figure[data-rehype-pretty-code-figure] {
   margin: 0;
   position: relative;
-  line-height: 1.6rem;
+  line-height: 1.26rem;
   position: relative;
+  background-color: var(--bg-codeblock);
+  border-radius: 5px;
 
   & > [data-rehype-pretty-code-title] {
     font-family: var(--codeFont);
-    font-size: 0.9rem;
-    padding: 0.1rem 0.5rem;
-    border: 1px solid var(--lightgray);
+    font-weight: bold;
+    font-size: 0.7rem; /*0.9rem;*/
+    padding: 0.5rem;
+    // border: 1px solid var(--lightgray);
     width: max-content;
     border-radius: 5px;
-    margin-bottom: -0.5rem;
+    // margin-bottom: -0.5rem;
+    padding-left: 1rem;
     color: var(--darkgray);
   }
 
@@ -412,11 +418,20 @@ pre {
   }
 }
 
+figcaption[data-rehype-pretty-code-title] + pre {
+  border-radius: 0 0 5px 5px;
+  border-top: 2px solid var(--lightgray);
+}
+figure[data-rehype-pretty-code-figure] > pre {
+  margin-top: 0;
+  padding-top: 0;
+}
 
-p code {
+:not(pre) > code {
   font-family: var(--codeFont) !important;
-  color: #6bd474;
-  background-color: #6e768130;
+  color: var(--color-code);
+  background-color: var(--bg-codeblock);
+  font-size: 80%;
 }
 
 code {
@@ -438,7 +453,7 @@ p {
   overflow-x: auto;
 
   & > table {
-    margin: 1rem;
+    margin: 1rem 0;
     padding: 1.5rem;
     border-collapse: collapse;
 
@@ -483,6 +498,15 @@ p img {
 p > img + em {
   display: block;
   transform: translateY(-1rem);
+}
+
+figure.img-fig {
+  text-align: center;
+  & figcaption {
+    color: var(--darkgray);
+    font-size: 80%;
+    font-style: italic;
+  }
 }
 
 hr {

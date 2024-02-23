@@ -2,8 +2,8 @@ import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 import { IconFolderOptions } from "./quartz/plugins/components/FileIcons";
 
-// components shared across all pages
 
+// components shared across all pages
 const iconsOptions: IconFolderOptions = {
   rootIconFolder: "quartz/static/icons",
   default: {
@@ -49,7 +49,7 @@ export const defaultContentPageLayout: PageLayout = {
     Component.DesktopOnly(
       Component.ExplorerBurger({
         folderClickBehavior: "link",
-        folderDefaultState: "collapsed",
+        folderDefaultState: "open" /*"collapsed"*/,
         useSavedState: true,
         title: "",
         iconSettings: iconsOptions,

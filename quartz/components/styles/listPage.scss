@@ -1,32 +1,45 @@
 @use "../../styles/variables.scss" as *;
 
+@media only screen and (min-width:500px) {
+  ul.section-ul {column-count: 2;}
+}
 ul.section-ul {
   list-style: none;
-  margin-top: 2em;
+  margin: 2em 0;
   padding-left: 0;
 }
 
 li.section-li {
   margin-bottom: 1em;
+  break-inside: avoid;
 
   & > .section {
-    display: grid;
-    grid-template-columns: 6em 3fr 1fr;
+    background-color: hsl(260, 25%, 16%);
+    border: 2px solid #d6d6d6;
+    border-radius: 6px;
+    padding: 10px 20px;
+    margin: auto auto 40px auto;
+    width: 75%;
+    box-shadow: 7pt 7pt rgba(200, 200, 200, 0.6);
 
     @media all and (max-width: $mobileBreakpoint) {
       & > .tags {
         display: none;
       }
     }
+    & > .tags,
+    & .desc .meta {
+      font-size: 75%;
+    }
 
     & > .desc > h3 > a {
       background-color: transparent;
-    }
-
-    & > .meta {
-      margin: 0;
-      flex-basis: 6em;
-      opacity: 0.6;
+      & > .meta {
+        margin: 0;
+        flex-basis: 6em;
+        opacity: 0.6;
+        float: right;
+      }
     }
   }
 }

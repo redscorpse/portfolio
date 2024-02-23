@@ -132,3 +132,14 @@ ol.overflow:after {
 }
 
 // h1, h2, h3, h4, h5, h6 {color: #7ee787;}
+
+@media only print {
+  pre code {
+    max-height: none !important;
+    overflow-x: hidden !important;
+    white-space: pre-line;
+  }
+  .left, .right, .page-header, .footer {
+    display: none;
+  }
+}

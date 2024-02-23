@@ -44,17 +44,12 @@ export function PageList({ cfg, fileData, allFiles, limit }: Props) {
         return (
           <li class="section-li">
             <div class="section">
-              {page.dates && (
-                <p class="meta">
-                  <Date date={getDate(cfg, page)!} locale={cfg.locale} />
-                </p>
-              )}
               <div class="desc">
-                <h3>
-                  <a href={resolveRelative(fileData.slug!, page.slug!)} class="internal">
-                    {title}
-                  </a>
-                </h3>
+                <h3><a href={resolveRelative(fileData.slug!, page.slug!)} class="internal">{title}
+                <span class="meta">
+                  {page.dates && ( <Date date={getDate(cfg, page)!} locale={cfg.locale} /> )}
+                </span>
+                </a></h3>
               </div>
               <ul class="tags">
                 {tags.map((tag) => (

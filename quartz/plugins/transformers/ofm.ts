@@ -218,6 +218,11 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
                     const width = match?.groups?.width ?? "auto"
                     const height = match?.groups?.height ?? "auto"
                     return {
+                      type: "html",
+                      value: `<figure class="img-fig"><img src="${url}" alt="${alt}" width="${width}" height="${height}"><figcaption style="max-width:${width}">${alt}</figcaption></figure>`,
+                    }
+                    /*
+                    return {
                       type: "image",
                       url,
                       data: {
@@ -228,6 +233,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
                         },
                       },
                     }
+                    */
                   } else if ([".mp4", ".webm", ".ogv", ".mov", ".mkv"].includes(ext)) {
                     return {
                       type: "html",
