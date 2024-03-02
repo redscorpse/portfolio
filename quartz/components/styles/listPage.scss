@@ -1,45 +1,84 @@
 @use "../../styles/variables.scss" as *;
 
-@media only screen and (min-width:500px) {
-  ul.section-ul {column-count: 2;}
+:root[saved-theme="light"] {
+  --cardColor: hsl(255, 2%, 95%);
 }
+:root[saved-theme="dark"] {
+  --cardColor: hsl(260, 25%, 16%);
+}
+
 ul.section-ul {
   list-style: none;
-  margin: 2em 0;
+  margin-top: 2em;
   padding-left: 0;
 }
 
 li.section-li {
   margin-bottom: 1em;
-  break-inside: avoid;
 
   & > .section {
-    background-color: hsl(260, 25%, 16%);
-    border: 2px solid #d6d6d6;
-    border-radius: 6px;
-    padding: 10px 20px;
-    margin: auto auto 40px auto;
-    width: 75%;
-    box-shadow: 7pt 7pt rgba(200, 200, 200, 0.6);
+    display: grid;
+    grid-template-columns: 6em 3fr 1fr;
 
     @media all and (max-width: $mobileBreakpoint) {
       & > .tags {
         display: none;
       }
     }
-    & > .tags,
-    & .desc .meta {
-      font-size: 75%;
+
+    & > h3.desc > a {
+      background-color: transparent;
     }
 
-    & > .desc > h3 > a {
-      background-color: transparent;
-      & > .meta {
-        margin: 0;
-        flex-basis: 6em;
-        opacity: 0.6;
-        float: right;
+    & > .meta {
+      margin: 0;
+      flex-basis: 6em;
+      opacity: 0.6;
+    }
+  }
+}
+
+body[data-slug="blog/index"] {
+  @media only screen and (min-width:500px) {
+    ul.section-ul {column-count: 2;}
+  }
+  ul.section-ul {
+    list-style: none;
+    margin: 2em 0;
+    padding-left: 0;
+  }
+  li.section-li {
+    margin-bottom: 1em;
+    break-inside: avoid;
+    & > .section {
+      display: block;
+      background-color: var(--cardColor);
+      border: 2px solid #d6d6d6;
+      border-radius: 6px;
+      padding: 10px 20px;
+      margin: auto auto 40px auto;
+      width: 75%;
+      box-shadow: 7pt 7pt rgba(200, 200, 200, 0.6);
+      & > .tags,
+      & .meta {
+        text-align: right;
+        font-size: 75%;
       }
+    }
+  }
+}
+
+body[data-slug="tags/index"] {
+  h2 {
+    border-top: 1px solid var(--lightgray);
+    padding-top: 1em;
+  }
+}
+body[data-slug^="tags"] {
+  li.section-li {
+    & > .section {
+      display: block;
+      & > .tags { font-size: 80%; }
     }
   }
 }
@@ -50,20 +89,4 @@ li.section-li {
   & > .tags {
     display: none;
   }
-}
-
-.tagDiv {
-  border: 1px solid;
-  border-radius: 6px;
-  padding: 15px;
-  margin: 25px auto;
-}
-.tagDiv h2 {
-  margin-top: 5px;
-}
-.tagDiv ul.tags {
-  display: none;
-}
-.tagDiv div.page-listing ul.section-ul li.section-li div.section p.meta {
-  margin-right: 0.5em;
 }

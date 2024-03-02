@@ -1,15 +1,14 @@
-import { QuartzComponentConstructor, QuartzComponentProps } from "../types"
+import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import style from "../styles/listPage.scss"
 import { PageList } from "../PageList"
 import { FullSlug, getAllSegmentPrefixes, simplifySlug } from "../../util/path"
 import { QuartzPluginData } from "../../plugins/vfile"
 import { Root } from "hast"
-import { classNames } from "../../util/lang"
 import { htmlToJsx } from "../../util/jsx"
 import { i18n } from "../../i18n"
 
 const numPages = 10
-function TagContent(props: QuartzComponentProps) {
+const TagContent: QuartzComponent = (props: QuartzComponentProps) => {
   const { tree, fileData, allFiles, cfg } = props
   const slug = fileData.slug
 
@@ -28,6 +27,7 @@ function TagContent(props: QuartzComponentProps) {
       ? fileData.description
       : htmlToJsx(fileData.filePath!, tree)
   const cssClasses: string[] = fileData.frontmatter?.cssclasses ?? []
+  const classes = ["popover-hint", ...cssClasses].join(" ")
   if (tag === "/") {
     const tags = [
       ...new Set(
@@ -39,7 +39,7 @@ function TagContent(props: QuartzComponentProps) {
       tagItemMap.set(tag, allPagesWithTag(tag))
     }
     return (
-      <div class={classNames(undefined, "popover-hint", ...cssClasses)}>
+      <div class={classes}>
         <article>
           <p>{content}</p>
         </article>
@@ -55,7 +55,7 @@ function TagContent(props: QuartzComponentProps) {
             const contentPage = allFiles.filter((file) => file.slug === `tags/${tag}`)[0]
             const content = contentPage?.description
             return (
-              <div class='tagDiv'>
+              <div>
                 <h2>
                   <a class="internal tag-link" href={`../tags/${tag}`}>
                     #{tag}
@@ -66,9 +66,12 @@ function TagContent(props: QuartzComponentProps) {
                   <p>
                     {i18n(cfg.locale).pages.tagContent.itemsUnderTag({ count: pages.length })}
                     {pages.length > numPages && (
-                      <span>
-                        {i18n(cfg.locale).pages.tagContent.showingFirst({ count: numPages })}
-                      </span>
+                      <>
+                        {" "}
+                        <span>
+                          {i18n(cfg.locale).pages.tagContent.showingFirst({ count: numPages })}
+                        </span>
+                      </>
                     )}
                   </p>
                   <PageList limit={numPages} {...listProps} />
@@ -87,7 +90,7 @@ function TagContent(props: QuartzComponentProps) {
     }
 
     return (
-      <div class={classNames(undefined, "popover-hint", ...cssClasses)}>
+      <div class={classes}>
         <article>{content}</article>
         <div class="page-listing">
           <p>{i18n(cfg.locale).pages.tagContent.itemsUnderTag({ count: pages.length })}</p>

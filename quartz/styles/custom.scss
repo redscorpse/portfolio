@@ -3,7 +3,9 @@
 @use "./custom/image_grid_float.scss";
 @use "./custom/grid_callouts.scss";
 @use "./custom/fileIcons.scss";
+@use "./custom/rstyle.scss";
 @use "./variables.scss" as *;
+@import "./fonts.scss";
 
 // Put your custom CSS here!
 
@@ -132,6 +134,32 @@ ol.overflow:after {
 }
 
 // h1, h2, h3, h4, h5, h6 {color: #7ee787;}
+body[data-slug^="blog"] .article-title {
+  font-family: 'PorSiempreGotica';
+  font-size: 2.05rem;
+}
+.section h3.desc {
+  font-family: 'PorSiempreGotica';
+  font-size: 1.32rem;
+}
+
+div.explorer.desktop-only {
+  grid-area: 1/1/1/1;
+}
+
+/* zoom image onclick */
+img:active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    height: calc(100vh - 4rem);
+    width: auto;
+    max-width: 100vw;
+    z-index: 10;
+}
 
 @media only print {
   pre code {

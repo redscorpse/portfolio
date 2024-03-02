@@ -68,7 +68,7 @@
       left: 0;
       width: 0;
       background-color: var(--light);
-      height: 2cm /* 90dvh */;
+      height: 0; /* 90dvh */
       position: absolute;
       max-height: max-content !important;
       z-index: 100;

@@ -53,10 +53,12 @@ document.addEventListener("nav", () => {
         if (adjacentCode) {
           if (foldCodeButton.classList.contains('active')) {
             adjacentCode.style.maxHeight = '0rem';
+            adjacentCode.style.padding = '0';
             foldCodeButton.innerHTML = unfoldButton;
             foldCodeButton.querySelector('svg').style.cssText = foldCodeButtonStyle;
           } else {
             adjacentCode.style.maxHeight = 'none';
+            adjacentCode.style.padding = '0.5rem 0';
             foldCodeButton.innerHTML = foldButton;
             foldCodeButton.querySelector('svg').style.cssText = foldCodeButtonStyle;
           }

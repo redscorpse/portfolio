@@ -2,7 +2,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  margin: 0 10px;
+  margin: 5px 10px;
 
   & > .toggle {
     display: none;
@@ -33,7 +33,6 @@
   & > #dayIcon {
     opacity: 0;
   }
-
   & > #nightIcon {
     opacity: 1;
   }
@@ -43,7 +42,6 @@
   & > #dayIcon {
     opacity: 1;
   }
-
   & > #nightIcon {
     opacity: 0;
   }

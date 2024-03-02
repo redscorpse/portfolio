@@ -48,7 +48,7 @@ button#explorer {
   max-height: none;
   :not(.explorer-burger-menu) & {
     transition: max-height 0.35s ease;
-    margin-top: 0.5rem;
+    margin-top: 0.9rem;
   }
 
   &.collapsed > .overflow::after {
@@ -70,6 +70,9 @@ button#explorer {
     }
   }
 }
+/* .explorer.mobile-only #explorer-content:not(.collapsed) {
+  width: calc($pageWidth - 3rem) !important;
+} */
 
 svg {
   pointer-events: all;
@@ -89,7 +92,7 @@ svg {
     color: var(--secondary);
     font-family: var(--headerFont);
     font-size: 0.95rem;
-    font-weight: $boldWeight;
+    font-weight: $semiBoldWeight;
     line-height: 1.5rem;
     display: inline-block;
   }
@@ -114,7 +117,7 @@ svg {
       font-size: 0.95rem;
       display: inline-block;
       color: var(--secondary);
-      font-weight: $boldWeight;
+      font-weight: $semiBoldWeight;
       margin: 0;
       line-height: 1.5rem;
       pointer-events: none;

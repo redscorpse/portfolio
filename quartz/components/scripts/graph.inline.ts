@@ -3,6 +3,9 @@ import * as d3 from "d3"
 import { registerEscapeHandler, removeAllChildren } from "./util"
 import { FullSlug, SimpleSlug, getFullSlug, resolveRelative, simplifySlug } from "../../util/path"
 
+const colorSecondary = "#6a58b7";
+const colorTertiary = "#bfaaf8";
+
 type NodeData = {
   id: SimpleSlug
   text: string
@@ -150,9 +153,11 @@ async function renderGraph(container: string, fullSlug: FullSlug) {
   const color = (d: NodeData) => {
     const isCurrent = d.id === slug
     if (isCurrent) {
-      return "var(--secondary)"
+      return colorSecondary
+      /* return "var(--secondary)" */
     } else if (visited.has(d.id) || d.id.startsWith("tags/")) {
-      return "var(--tertiary)"
+      return colorTertiary
+      /* return "var(--tertiary)" */
     } else {
       return "var(--gray)"
     }
