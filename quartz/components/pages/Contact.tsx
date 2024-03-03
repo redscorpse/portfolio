@@ -49,5 +49,6 @@ export const Contact = (
 	</section>
 
 </body>
+<script defer src="https://analytics.eu.umami.is/script.js" data-website-id="9079a4e3-0775-4419-bd65-242f5b0e7e3c"></script>
 </html>
 )

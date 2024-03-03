@@ -62,6 +62,6 @@ export const HomePage = (
 		</div>
 	</section>
 </body>
-<script src="https://www.googletagmanager.com/gtag/js?id=G-X8P1904KPE" type="application/javascript"></script>
+<script defer src="https://analytics.eu.umami.is/script.js" data-website-id="9079a4e3-0775-4419-bd65-242f5b0e7e3c"></script>
 </html>
 )

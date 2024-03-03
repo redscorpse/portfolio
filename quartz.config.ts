@@ -8,7 +8,8 @@ const config: QuartzConfig = {
     locale: "en-US",
     enablePopovers: false,
     analytics: {
-      provider: 'google', tagId: 'G-X8P1904KPE',
+      // provider: 'google', tagId: 'G-X8P1904KPE',
+      provider: 'umami', websiteId: '9079a4e3-0775-4419-bd65-242f5b0e7e3c',
     },
     baseUrl: "redscorpse.sytes.net",
     ignorePatterns: ["private", "templates", ".obsidian"],
