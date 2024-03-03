@@ -31,9 +31,10 @@ li.section-li {
     }
 
     & > .meta {
-      margin: 0;
+      margin: 0 0 0 0.2em;
       flex-basis: 6em;
       opacity: 0.6;
+      font-size: 75%;
     }
   }
 }

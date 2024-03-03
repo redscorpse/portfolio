@@ -8,7 +8,8 @@ import { visit } from "unist-util-visit"
 import { Root, Element, ElementContent } from "hast"
 import { GlobalConfiguration } from "../cfg"
 import { i18n } from "../i18n"
-import { myHomePage, myContact } from "./pages/Home"
+import { HomePage } from "./pages/Home"
+import { Contact } from "./pages/Contact"
 
 interface RenderComponents {
   head: QuartzComponent
@@ -239,9 +240,9 @@ export function renderPage(
   )
 
   if (slug == "index") {
-    return "<!DOCTYPE html>\n" + render(myHomePage)
+    return "<!DOCTYPE html>\n" + render(HomePage)
   } else if (slug == "contact") {
-    return "<!DOCTYPE html>\n" + render(myContact)
+    return "<!DOCTYPE html>\n" + render(Contact)
   } else {
     return "<!DOCTYPE html>\n" + render(doc)
   }

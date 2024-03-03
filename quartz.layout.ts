@@ -22,8 +22,8 @@ export const sharedPageComponents: SharedLayout = {
         iconSettings: iconsOptions,
       }),
     ),
-    Component.MobileOnly(Component.PageTitle()),
-    Component.MobileOnly(Component.Spacer()),
+    Component.PageTitle(),
+    Component.Spacer(),
     Component.Search(),
     Component.Darkmode(),
   ],
@@ -45,7 +45,6 @@ export const defaultContentPageLayout: PageLayout = {
     Component.TagList(),
   ],
   left: [
-    Component.DesktopOnly(Component.PageTitle()),
     Component.DesktopOnly(
       Component.ExplorerBurger({
         folderClickBehavior: "link",

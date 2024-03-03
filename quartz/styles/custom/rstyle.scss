@@ -14,6 +14,7 @@ body[data-slug="contact"] {
 
   /* ----- PRELOADER ----- */
   & #preloader {
+    display: none; //flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -21,7 +22,6 @@ body[data-slug="contact"] {
     height: 100%;
     z-index: 100;
     background-color: hsl(260, 15%, 5%);
-    display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -46,7 +46,6 @@ body[data-slug="contact"] {
       display: block;
       color: #1a1622;
       padding: 0;
-      height: 45px;
       text-decoration: none;
       font-family: "BarlowCondensed";
       font-weight: normal;
@@ -55,7 +54,7 @@ body[data-slug="contact"] {
 
     & li a:hover,
     & .menu-btn:hover {
-      background-color: hsl(260, 31%, 31%);
+      background-color: hsl(260, 31%, 21%);
       color: hsl(260, 20%, 80%);
     }
 
@@ -169,18 +168,18 @@ body[data-slug="contact"] {
       width: 100%;
     }
 
-    .navbar-container li {
-      float: right;
-    }
-
     .navbar-container .logo {
       line-height: 1;
     }
 
+    .navbar-container ul {
+      display: flex;
+    }
+
     .navbar-container li a {
       color: #fff;
-      padding: 0px 30px;
       line-height: 38px;
+      padding: 0px 30px 7px 30px;
     }
 
     .navbar-container .menu {
@@ -262,6 +261,9 @@ body[data-slug="contact"] {
     background: linear-gradient(to right, rgb(70, 80, 80), rgb(200, 200, 200), rgb(120, 140, 140));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    & a {
+      margin: auto 0.25rem;
+    }
   }
 
   & .fa {

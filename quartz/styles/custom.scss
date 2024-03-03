@@ -147,6 +147,15 @@ div.explorer.desktop-only {
   grid-area: 1/1/1/1;
 }
 
+.tag-link {
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+.katex {
+    text-align: center;
+    margin: 0 auto;
+}
+
 /* zoom image onclick */
 img:active {
     position: fixed;
