@@ -16,9 +16,9 @@ const config: QuartzConfig = {
     theme: {
       cdnCaching: true,
       typography: {
-        header: "Barlow Nerd Font",
-        body: "Barlow Nerd Font",
-        code: "JetBrainsMono Nerd Font",
+        header: "BarlowNF",
+        body: "BarlowNF",
+        code: "JetBrainsMonoNF",
       },
       colors: {
         lightMode: {
