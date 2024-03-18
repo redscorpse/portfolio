@@ -4,8 +4,7 @@ export const Contact = (
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width"/>
 	<title>Reds</title>
-	<link rel="icon/png" href="/assets/img/RC.png" />
-  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico"/>
+  <link rel="icon" type="image/x-icon" href="static/favicons/icon.gif"/>
 	<link href="/index.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 	<link href="/assets/atom-loader.css" rel="stylesheet" type="text/css" />

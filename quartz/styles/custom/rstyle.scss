@@ -282,19 +282,19 @@ body[data-slug="contact"] {
   }
 
   & .career-item {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-gap: 20px;
     margin: 0.8em 0.75em 0.8em 0em;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
   }
 
   & .career-item div.icon {
+    grid-area: 1/1/1/1;
     border: 2px solid white;
     border-radius: 4px;
     padding: 10px;
-    display: inline-block;
-    height: 4rem;
-    width:  4rem;
+    height: 60px !important;
+    width:  60px !important;
   }
 
   & .career-item div.icon a {
@@ -304,10 +304,10 @@ body[data-slug="contact"] {
   }
 
   & .career-item-summary {
-    width: 85%;
+    grid-area: 1/2/1/5;
     text-align: left;
-    padding-left: 1em;
     font-family: 'Fira Sans';
+    font-size: 90%;
   }
 
   & .icon .atom {
