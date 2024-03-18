@@ -24,7 +24,7 @@ This is the first cybersecurity competition in which I have participated, so it 
 
 # SQ1: The Return of the Yeti
 
-## Gueting the QR – Room discovery
+## Getting the QR – Room discovery
 
 ROOM: https://tryhackme.com/room/adv3nt0fdbopsjcap
 
