@@ -151,6 +151,28 @@ div.explorer.desktop-only {
   font-family: "JetBrainsMonoNF";
 }
 
+kbd {
+  font-family: "JetBrainsMonoNF";
+  border-radius: 4px;
+  font-size: 75%;
+  padding: 0.1em 0.25em;
+  border: 1px solid;
+  box-shadow: 2px 2px;
+  margin-right: 2px;
+}
+:root[saved-theme=dark] {
+  kbd {
+    color: #8b949e;
+    background-color: #161b22;
+  }
+}
+:root[saved-theme=light] {
+  kbd {
+    color: #6b747e;
+    background-color: #e6ebf2;
+  }
+}
+
 .katex {
     text-align: center;
     margin: 0 auto;
