@@ -192,6 +192,13 @@ img:active {
     z-index: 10;
 }
 
+.footnotes {
+  margin: 4rem auto;
+  border-top: 1px solid var(--lightgray);
+  border-bottom: 1px solid var(--lightgray);
+}
+#footnote-label {margin: 0.5em auto}
+
 @media only print {
   pre code {
     max-height: none !important;

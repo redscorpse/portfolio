@@ -9,15 +9,26 @@ draft: false
 # Raspberry Pi
 ![[assets/Raspberry Pi/RaspberryPi-img1.png| Raspberry Pi 4 | 350]]
 
-Raspberry Pi is awesome. I've been without having a computer for a while and with this I have been able to do almost everything, so I will share here some of the best tricks that you can be doing with that tiny computer if you aren't doing them already.
+Raspberry Pi is awesome. I've been studying without a computer, only with an iPad and a Raspberry Pi and with this setup I have been able to do almost everything. I will share here some of the most useful things that I've learned so far.
 
-> [!info] I haven't squeezed all its potential at the hardware level, here I will explain how did I use the Raspberry Pi as a remote computer.
+> [!info] I haven't squeezed all its potential at the hardware level, so I will mainly explain how did I use the Raspberry Pi as a remote server.
+
+## Installing an OS
+Raspberry Pi is a series of small single-board computers (SBCs) with an integrated ARM-compatible central processing unit (CPU)[^rpi-wikipedia]. This is a great feature because this architecture has low power consumption compared to a normal computer or a miniPC, however it can make a difference for running some specific software that is only available for x86_64 architectures.
+
+When you buy a Raspberry Pi (by itself, without any pack) you only get a motherboard. It is true that it is a very powerful device that you can get under 100$, however you may need to buy additional components such as a case or a fan.
+The most important thing you need in addition with the rpi is some kind of ROM. The device has an slot for an microSD card, but I really recommend to boot it from an SSD if you want to use it as a server (which you can attach via USB3.0).
+There are many tutorials on how to install an Operating System (OS), but the easiest one is using [Raspberry Pi Imager](https://www.raspberrypi.com/software/) (which allows you to flash the microSD card or USB/SSD setting basic stuff for remote control such as enabling SSH, connecting to WiFi, etc.). Also you can download a compatible image[^rpi-images] and use the `dd` command:
+```bash
+dd if=/path/to/yourImage.iso of=/dev/sdx
+```
 
 ## Remote Access
-I have been accessing the raspi through an iPad and also with my phone. One of the first things I did was configuring the "Pi4 USB-C Gadget" as it's explained [here](https://www.hardill.me.uk/wordpress/2019/11/02/pi4-usb-c-gadget/). This was great, but the main problem that it has is that you have to carry it with you anywhere, and also you can't let it powered for hours, which considering the low power consumption of this device it's one of it's great advantages. The most convenient thing should be accessing it through SSH, but unless you don't open your router ports, there will be no way of accessing it from the outside.
+I have been accessing the raspi through an iPad and also with my phone. One of the first things I did was configuring the "Pi4 USB-C Gadget" as it's explained at [*Ben's Place*](https://www.hardill.me.uk/wordpress/2019/11/02/pi4-usb-c-gadget/). This was great, but the main problem that it has is that you have to carry it with you anywhere, and also you can't let it powered for hours as a server. 
+The most convenient would be to access it through SSH, but I don't want to open the ports of my home router to the internet for security reasons, so configuring a VPN is a good alternative for this. 
 
 ### ZeroTier
-ZeroTier is the best solution (secure and free) that I know for accessing to your devices from anywhere. It's a private virtual network (VPN) that connects all your devices. Here's a quick installation guide:
+ZeroTier is the best solution (secure and free) that I know for accessing to your devices from anywhere out of your network. It's a private virtual network (VPN) that connects all your devices. Here's a quick installation guide:
 
 ```bash file:"zerotier setup"
 # make sure to pick the latest version

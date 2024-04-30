@@ -2,6 +2,7 @@
 import clipboardScript from "./scripts/clipboard.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import foldCodeButton from "./scripts/foldCodeButton.inline"
+import otherScripts from "./scripts/otherScripts.inline"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 
 const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
@@ -11,5 +12,6 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
 Body.afterDOMLoaded = clipboardScript
 Body.css = clipboardStyle
 Body.afterDOMLoaded = foldCodeButton
+Body.afterDOMLoaded = otherScripts
 
 export default (() => Body) satisfies QuartzComponentConstructor
