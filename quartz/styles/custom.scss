@@ -202,3 +202,8 @@ img:active {
     display: none;
   }
 }
+
+body[data-slug="blog/index"] {
+  .content-meta, .breadcrumb-container { display: none !important; }
+  .article-title { text-align: center; margin-bottom:0.5em; }
+}
