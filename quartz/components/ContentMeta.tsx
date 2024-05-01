@@ -26,7 +26,12 @@ export default ((opts?: Partial<ContentMetaOptions>) => {
       const segments: string[] = []
 
       if (fileData.dates) {
-        segments.push(formatDate(getDate(cfg, fileData)!, cfg.locale))
+        // segments.push(formatDate(getDate(cfg, fileData)!, cfg.locale))
+        let fileDate = `${formatDate(getDate(cfg, fileData)!, cfg.locale)}`;
+        if (fileData.frontmatter.lastmod) {
+          fileDate = fileDate + ` (lastmod: ${formatDate(fileData.dates.modified)})`;
+        }
+        segments.push(fileDate);
       }
 
       // Display reading time if enabled
