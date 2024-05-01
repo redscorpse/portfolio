@@ -146,9 +146,9 @@ export default ((userOpts?: Partial<Options>) => {
         {collapseExplorer}
         <div id="explorer-content" class={displayClass === "mobile-only" ? "collapsed" : ""}>
           <div id='explorer-navbar'>
-            <a href="/index.html">HOME</a>
-            <a href="/blog.html">BLOG</a>
-            <a href="/contact.html">CONTACT</a>
+            <a href="/index">HOME</a>
+            <a href="/blog">BLOG</a>
+            <a href="/contact">CONTACT</a>
           </div>
           <ul class="overflow" id="explorer-ul">
             <ExplorerNode node={fileTree} opts={opts} fileData={fileData} />
