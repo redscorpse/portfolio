@@ -55,7 +55,7 @@ export const HomePage = (
 				</div>
 				<div class='career-item-summary'>
 					<p>✧ Learning programming on my free time.</p>
-					<p>✧ I use debian BTW :)</p>
+					<p>✧ I use Debian [<i class="fa-brands fa-debian"></i>] btw.</p>
           <p>✧ Poetry, philosophy and music.</p>
 				</div>
 			</div>
