@@ -42,7 +42,7 @@ export const Contact = (
 		<div id='links'>
 			<a href='https://github.com/redscorpse' target='_blank' class='fa-brands fa-square-github'></a>
 			<a href='https://twitter.com/redsc0rpse' target='_blank' class='fa-brands fa-square-x-twitter'></a>
-			<a href='https://www.linkedin.com/mwlite/in/ana-rojas-15528419a' target='_blank'
+			<a href='https://www.linkedin.com/in/ana-rojas-fernandez-15528419a' target='_blank'
 				class='fa-brands fa-linkedin'></a>
 		</div>
 	</section>
