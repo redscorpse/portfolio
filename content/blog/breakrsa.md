@@ -12,7 +12,7 @@ draft: true
 # [Breaking RSA](https://tryhackme.com/room/breakrsa)
 
 ---
-A brief overview of RSA
+## A brief overview of RSA
 
 The security of RSA relies on the practical difficulty of factoring the product of two large prime numbers, the "factoring problem". RSA key pair is generated using 3 large positive integers -
 
