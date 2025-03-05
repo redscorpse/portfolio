@@ -26,12 +26,11 @@ export const HomePage = (
   </nav>
 	<div id="home">
 		<div id='myName'>Hello I'm <br/><span style="font-size:300%">Reds</span></div>
-		<div id='whoAmI'>A chemistry student with a digital mindset.</div>
+		<div id='whoAmI'>The incoherence of</div>
 	</div>
 	<section id="about" class='section'>
-		<h2>About me</h2>
-		<i style="font-family:'Fira Sans';">There are less reasons for giving up than for keep fighting.</i>
-		<i style="font-family:'Fira Sans';"></i>
+		<h2>About me</h2>	
+    <p><i>There are less reasons for giving up than for keep fighting.</i></p>
 	</section>
 	<section id="careers" class='section'>
 		<h2>What I do</h2>
@@ -46,15 +45,18 @@ export const HomePage = (
 					</a>
 				</div>
 				<div class='career-item-summary'>
-					Studying Computational Chemistry at University.
+					<p>✦ University degree in Computational Chemistry.</p>
+          <p>✦ Cybersecurity student.</p>
+          <p>✦ <a href='https://www.caixabank.com/en/headlines/news/caixabank-and-microsoft-recognize-the-best-female-stem-students-in-in-spain-with-the-wonnow-awards-24'>WONNWOW 2024 Awards</a></p>
 				</div>
 			</div>
 			<div class='career-item'>
 				<div class='icon' style='background-image: url("/assets/img/computer.gif"); background-size:contain;'>
 				</div>
 				<div class='career-item-summary'>
-					Learning programming and cybersecurity on my free time.
-					<br/><a href='/tags/cybersecurity'>See more</a>
+					<p>✧ Learning programming on my free time.</p>
+					<p>✧ I use debian BTW :)</p>
+          <p>✧ Poetry, philosophy and music.</p>
 				</div>
 			</div>
 		</div>

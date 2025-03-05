@@ -366,3 +366,11 @@ body[data-slug="contact"] {
     color: #e3e3e3;
   }
 }
+
+.section * {
+  color: #e3e3e3;
+  font-family:'Fira Sans';
+}
+#about p, .career-item-summary p {
+  line-height: 0.25em;
+}
