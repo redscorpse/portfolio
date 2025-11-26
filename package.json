@@ -74,7 +74,7 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.0",
+    "remark-rehype": "^11.1.2",
     "remark-smartypants": "^3.0.1",
     "rfdc": "^1.4.1",
     "rimraf": "^5.0.5",
